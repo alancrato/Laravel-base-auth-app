@@ -14,3 +14,21 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group([
+    'prefix' => 'admin',
+    'as' => 'admin.',
+    'namespace' => 'Admin\\'
+], function (){
+    Route::get('login', 'Auth\LoginController@ShowLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
+
+    Route::group(['middleware' => 'can:admin'], function(){
+        Route::post('logout', 'Auth\LoginController@logout')->name('logout');
+        Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    });
+});
