@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ url('css/style.css')}} " rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://utils.organizze.com.br/favicons/favicon-32x32.png" sizes="32x32">
 </head>
 <body>
     <div id="app">
@@ -36,7 +38,12 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        &nbsp;<li>
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="{{ route('admin.users.index') }}">Usuários</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

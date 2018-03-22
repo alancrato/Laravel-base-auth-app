@@ -11,7 +11,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Models\User::class,20)
+        factory(\App\Models\User::class,2)
             ->states('admin')
             ->create();
     }

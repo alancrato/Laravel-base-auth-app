@@ -42,12 +42,12 @@ class LoginController extends Controller
     /**
      * @param Request $request
      * @return array
-     * Garantindo que somente usuários admin role 1 acessem a aplicação
+     * Garantindo que somente usuários admin role 2 acessem a aplicação
      */
     protected function credentials(Request $request)
     {
         $data = $request->only($this->username(),'password');
-        $data['role'] = User::ROLE_ADMIN;
+        $data['role'] = User::ROLE_CLIENT;
         return $data;
     }
 }

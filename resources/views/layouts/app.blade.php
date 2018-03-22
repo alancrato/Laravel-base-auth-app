@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ url('css/style.css')}} " rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://utils.organizze.com.br/favicons/favicon-32x32.png" sizes="32x32">
 </head>
 <body>
     <div id="app">

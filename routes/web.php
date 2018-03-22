@@ -26,9 +26,9 @@ Route::group([
 ], function (){
     Route::get('login', 'Auth\LoginController@ShowLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
-
     Route::group(['middleware' => 'can:admin'], function(){
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+        Route::resource('users', 'UsersController');
     });
 });
