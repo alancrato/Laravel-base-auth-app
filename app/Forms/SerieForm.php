@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Forms;
+
+use Kris\LaravelFormBuilder\Form;
+
+class SerieForm extends Form
+{
+    public function buildForm()
+    {
+        $this
+            ->add('name', 'text',[
+                'rules' => 'required|min:3'
+            ])
+            ->add('description', 'text',[
+                'rules' => 'min:3'
+            ])
+            ->add('embed', 'text',[
+                'rules' => 'required'
+            ]);
+    }
+}

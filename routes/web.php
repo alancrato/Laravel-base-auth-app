@@ -31,5 +31,6 @@ Route::group([
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::resource('users', 'UsersController');
         Route::resource('categories', 'CategoryController');
+        Route::resource('series', 'SerieController');
     });
 });

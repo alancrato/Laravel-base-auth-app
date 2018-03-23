@@ -36,3 +36,11 @@ $factory->define(\App\Models\Category::class, function (Faker\Generator $faker){
       'url' => $faker->url
    ];
 });
+
+$factory->define(\App\Models\Serie::class, function (Faker\Generator $faker){
+    return [
+        'name' => $faker->name,
+        'description' => $faker->word,
+        'embed' => $faker->name
+    ];
+});

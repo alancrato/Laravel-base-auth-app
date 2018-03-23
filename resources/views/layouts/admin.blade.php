@@ -24,7 +24,8 @@
                 $arrayList = [
                     ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
                     ['link' => route('admin.users.index'), 'title' => 'Users'],
-                    ['link' => route('admin.categories.index'), 'title' => 'Categories']
+                    ['link' => route('admin.categories.index'), 'title' => 'Categories'],
+                    ['link' => route('admin.series.index'), 'title' => 'Series']
                 ];
                 $menus = Navigation::links($arrayList);
                 $logout = Navigation::links([[
