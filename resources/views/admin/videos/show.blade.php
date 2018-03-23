@@ -48,5 +48,11 @@
                 </thead>
             </table>
         </div>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>{{$video->name}} {{$video->description}}</h3>
+                <iframe src="https://player.vimeo.com/video/{{$video->url}}?title=0&byline=0" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+            </div>
+        </div>
     </div>
 @endsection
