@@ -17,65 +17,40 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default navbar-static-top navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
 
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+        @php
+            $navbar = Navbar::withBrand(config('app.name'),url('/admin/dashboard'))->inverse();
+            if(Auth::check()){
+                $arrayList = [
+                    ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
+                    ['link' => route('admin.users.index'), 'title' => 'Users']
+                ];
+                $menus = Navigation::links($arrayList);
+                $logout = Navigation::links([[
+                    Auth::user()->name,
+                    [
+                        [
+                            'link' => route('admin.logout'),
+                            'title' => 'logout',
+                            'linkAttributes' => [
+                                'onclick' => "event.preventDefault();document.getElementById(\"form-logout\").submit();"
+                            ]
+                        ],
+                    ]
+                ]])->right();
+                $navbar->withContent($menus)->withContent($logout);
+            }
+        @endphp
+        {!! $navbar !!}
 
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
+        @php $formLogout = FormBuilder::plain([
+                    'id' => 'form-logout',
+                    'route' => ['admin.logout'],
+                    'method' => 'POST',
+                    'style' => 'display:none'
+                ]) @endphp
+        {!! form($formLogout) !!}
 
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;<li>
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                        </li>
-                        <li>
-                            <a class="nav-link" href="{{ route('admin.users.index') }}">Usuários</a>
-                        </li>
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-                        @if (Auth::guest())
-                            <li><a href="{{ route('admin.login') }}">Login</a></li>
-                        @else
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('admin.logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
         @if(Session::has('message'))
             <div class="container">

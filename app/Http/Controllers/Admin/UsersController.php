@@ -4,13 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use App\Forms\UsersForm;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Kris\LaravelFormBuilder\Form;
-use Kris\LaravelFormBuilder\FormBuilder;
 
 class UsersController extends Controller
 {
+    /**
+     * @var UserRepository
+     */
+    private $repository;
+
+
+    public function __construct(UserRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +29,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::paginate();
+        $users = $this->repository->paginate();
         return view('admin.users.index', compact('users'));
     }
 
@@ -55,9 +66,8 @@ class UsersController extends Controller
         }
 
         $data = $form->getFieldValues();
-        $data['role'] = User::ROLE_CLIENT;
-        $data['password'] = User::generatePassword();
-        User::create($data);
+
+        $this->repository->create($data);
 
         $request->session()->flash('message', 'Usuário cadastrado com sucesso.');
 
@@ -72,7 +82,7 @@ class UsersController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -98,11 +108,11 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         /** @var Form $form */
         $form = \FormBuilder::create(UsersForm::class, [
-            'data' => ['id' => $user->id]
+            'data' => ['id' => $id]
         ]);
 
         if(!$form->isValid()){
@@ -113,8 +123,9 @@ class UsersController extends Controller
         }
 
         $data = array_except($form->getFieldValues(),['password','role']);
-        $user->fill($data);
-        $user->save();
+
+        $this->repository->update($data,$id);
+
         $request->session()->flash('message', 'Usuário atualizado com sucesso.');
 
         return redirect()->route('admin.users.index');
@@ -126,8 +137,12 @@ class UsersController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Request $request, $id)
     {
-        //
+        $this->repository->delete($id);
+
+        $request->session()->flash('message', 'Usuário excluido com sucesso.');
+
+        return redirect()->route('admin.users.index');
     }
 }
