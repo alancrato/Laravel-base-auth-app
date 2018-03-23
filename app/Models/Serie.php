@@ -14,12 +14,12 @@ class Serie extends Model implements Transformable, TableInterface
     protected $fillable = [
         'name',
         'description',
-        'embed'
+        'url'
     ];
 
     public function getTableHeaders()
     {
-        return ['#', 'Nome', 'Description', 'Embed'];
+        return ['#', 'Nome', 'Description', 'Url'];
     }
 
     public function getValueForHeader($header)
@@ -31,8 +31,8 @@ class Serie extends Model implements Transformable, TableInterface
                 return $this->name;
             case 'Description':
                 return $this->description;
-            case 'Embed':
-                return $this->embed;
+            case 'Url':
+                return $this->url;
         }
     }
 }

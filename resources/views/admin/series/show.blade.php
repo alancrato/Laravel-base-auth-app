@@ -33,6 +33,10 @@
                         <th scope="row">Description</th>
                         <td>{{$series->description}}</td>
                     </tr>
+                    <tr>
+                        <th scope="row">Url</th>
+                        <td>{{$series->url}}</td>
+                    </tr>
                 </thead>
             </table>
         </div>

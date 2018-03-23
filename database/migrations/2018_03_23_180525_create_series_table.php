@@ -17,7 +17,7 @@ class CreateSeriesTable extends Migration
             $table->increments('id');
             $table->string('name',100);
             $table->string('description',100)->nullable();
-            $table->string('embed',100)->nullable();
+            $table->string('url',100)->nullable();
             $table->timestamps();
 		});
 	}

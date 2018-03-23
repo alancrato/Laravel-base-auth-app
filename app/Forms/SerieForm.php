@@ -15,7 +15,7 @@ class SerieForm extends Form
             ->add('description', 'text',[
                 'rules' => 'min:3'
             ])
-            ->add('embed', 'text',[
+            ->add('url', 'text',[
                 'rules' => 'required'
             ]);
     }
