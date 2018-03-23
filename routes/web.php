@@ -30,5 +30,6 @@ Route::group([
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::resource('users', 'UsersController');
+        Route::resource('categories', 'CategoryController');
     });
 });

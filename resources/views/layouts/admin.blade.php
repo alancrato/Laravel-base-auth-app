@@ -23,7 +23,8 @@
             if(Auth::check()){
                 $arrayList = [
                     ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
-                    ['link' => route('admin.users.index'), 'title' => 'Users']
+                    ['link' => route('admin.users.index'), 'title' => 'Users'],
+                    ['link' => route('admin.categories.index'), 'title' => 'Categories']
                 ];
                 $menus = Navigation::links($arrayList);
                 $logout = Navigation::links([[

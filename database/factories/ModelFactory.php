@@ -28,3 +28,11 @@ $factory->state(\App\Models\User::class,'admin', function (Faker\Generator $fake
       'role' => \App\Models\User::ROLE_ADMIN
     ];
 });
+
+$factory->define(\App\Models\Category::class, function (Faker\Generator $faker){
+   return [
+      'name' => $faker->name,
+      'description' => $faker->word,
+      'url' => $faker->url
+   ];
+});
