@@ -25,7 +25,8 @@
                     ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
                     ['link' => route('admin.users.index'), 'title' => 'Users'],
                     ['link' => route('admin.categories.index'), 'title' => 'Categories'],
-                    ['link' => route('admin.series.index'), 'title' => 'Series']
+                    ['link' => route('admin.series.index'), 'title' => 'Series'],
+                    ['link' => route('admin.videos.index'), 'title' => 'Videos']
                 ];
                 $menus = Navigation::links($arrayList);
                 $logout = Navigation::links([[

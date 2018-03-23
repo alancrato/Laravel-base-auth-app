@@ -8,6 +8,8 @@ use App\Repositories\SerieRepository;
 use App\Repositories\SerieRepositoryEloquent;
 use App\Repositories\UserRepository;
 use App\Repositories\UserRepositoryEloquent;
+use App\Repositories\VideoRepository;
+use App\Repositories\VideoRepositoryEloquent;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -32,6 +34,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepository::class, UserRepositoryEloquent::class);
         $this->app->bind(CategoryRepository::class, CategoryRepositoryEloquent::class);
         $this->app->bind(SerieRepository::class, SerieRepositoryEloquent::class);
+        $this->app->bind(VideoRepository::class, VideoRepositoryEloquent::class);
         //:end-bindings:
     }
 }

@@ -32,5 +32,6 @@ Route::group([
         Route::resource('users', 'UsersController');
         Route::resource('categories', 'CategoryController');
         Route::resource('series', 'SerieController');
+        Route::resource('videos', 'VideoController');
     });
 });

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Serie;
-use App\Forms\SerieForm;
-use App\Repositories\SerieRepository;
+use App\Models\Video;
+use App\Forms\VideoForm;
+use App\Repositories\VideoRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class SerieController extends Controller
+class VideoController extends Controller
 {
     /**
      * @var SerieRepository
@@ -19,7 +19,7 @@ class SerieController extends Controller
      * SerieController constructor.
      * @param SerieRepository $repository
      */
-    public function __construct(SerieRepository $repository)
+    public function __construct(VideoRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -31,8 +31,8 @@ class SerieController extends Controller
      */
     public function index()
     {
-        $series = $this->repository->paginate();
-        return view('admin.series.index', compact('series'));
+        $videos = $this->repository->paginate();
+        return view('admin.videos.index', compact('videos'));
     }
 
     /**
@@ -42,11 +42,11 @@ class SerieController extends Controller
      */
     public function create()
     {
-        $form = \FormBuilder::create(SerieForm::class, [
-            'url' => route('admin.series.store'),
+        $form = \FormBuilder::create(VideoForm::class, [
+            'url' => route('admin.videos.store'),
             'method' => 'POST'
         ]);
-        return view('admin.series.create', compact('form'));
+        return view('admin.videos.create', compact('form'));
     }
 
     /**
@@ -58,7 +58,7 @@ class SerieController extends Controller
     public function store(Request $request)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(SerieForm::class);
+        $form = \FormBuilder::create(VideoForm::class);
 
         if(!$form->isValid()){
             return redirect()
@@ -71,21 +71,21 @@ class SerieController extends Controller
 
         $this->repository->create($data);
 
-        $request->session()->flash('message', 'Serie cadastrada com sucesso.');
+        $request->session()->flash('message', 'Video cadastrado com sucesso.');
 
-        return redirect()->route('admin.series.index');
+        return redirect()->route('admin.videos.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Serie $serie
+     * @param Video $videos
      * @return \Illuminate\Http\Response
      * @internal param int $id
      */
-    public function show(Serie $series)
+    public function show(Video $video)
     {
-        return view('admin.series.show', compact('series'));
+        return view('admin.videos.show', compact('video'));
     }
 
     /**
@@ -94,14 +94,14 @@ class SerieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Serie $series)
+    public function edit(Video $video)
     {
-        $form = \FormBuilder::create(SerieForm::class, [
-            'url' => route('admin.series.update',['series' => $series->id]),
+        $form = \FormBuilder::create(VideoForm::class, [
+            'url' => route('admin.videos.update',['video' => $video->id]),
             'method' => 'PUT',
-            'model' => $series
+            'model' => $video
         ]);
-        return view('admin.series.edit', compact('form'));
+        return view('admin.videos.edit', compact('form'));
     }
 
     /**
@@ -114,7 +114,7 @@ class SerieController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(SerieForm::class, [
+        $form = \FormBuilder::create(VideoForm::class, [
             'data' => ['id' => $id]
         ]);
 
@@ -129,9 +129,9 @@ class SerieController extends Controller
 
         $this->repository->update($data,$id);
 
-        $request->session()->flash('message', 'Serie atualizada com sucesso.');
+        $request->session()->flash('message', 'Video atualizado com sucesso.');
 
-        return redirect()->route('admin.series.index');
+        return redirect()->route('admin.videos.index');
     }
 
     /**
@@ -144,8 +144,8 @@ class SerieController extends Controller
     {
         $this->repository->delete($id);
 
-        $request->session()->flash('message', 'Serie excluida com sucesso.');
+        $request->session()->flash('message', 'Video excluido com sucesso.');
 
-        return redirect()->route('admin.series.index');
+        return redirect()->route('admin.videos.index');
     }
 }

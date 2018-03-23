@@ -44,3 +44,13 @@ $factory->define(\App\Models\Serie::class, function (Faker\Generator $faker){
         'url' => $faker->url
     ];
 });
+
+$factory->define(\App\Models\Video::class, function (Faker\Generator $faker){
+    return [
+        'name' => $faker->name,
+        'description' => $faker->word,
+        'serie_id' => rand(1,5),
+        'content' => $faker->word,
+        'url' => $faker->url
+    ];
+});
