@@ -6,6 +6,8 @@ use App\Forms\UsersForm;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Kris\LaravelFormBuilder\Form;
+use Kris\LaravelFormBuilder\FormBuilder;
 
 class UsersController extends Controller
 {
@@ -16,7 +18,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(2);
+        $users = User::paginate();
         return view('admin.users.index', compact('users'));
     }
 
@@ -42,7 +44,24 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        /** @var Form $form */
+        $form = \FormBuilder::create(UsersForm::class);
+
+        if(!$form->isValid()){
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
+        }
+
+        $data = $form->getFieldValues();
+        $data['role'] = User::ROLE_CLIENT;
+        $data['password'] = User::generatePassword();
+        User::create($data);
+
+        $request->session()->flash('message', 'Usuário cadastrado com sucesso.');
+
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -64,7 +83,12 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        $form = \FormBuilder::create(UsersForm::class, [
+            'url' => route('admin.users.update',['user' => $user->id]),
+            'method' => 'PUT',
+            'model' => $user
+        ]);
+        return view('admin.users.edit', compact('form'));
     }
 
     /**
@@ -76,7 +100,24 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        /** @var Form $form */
+        $form = \FormBuilder::create(UsersForm::class, [
+            'data' => ['id' => $user->id]
+        ]);
+
+        if(!$form->isValid()){
+            return redirect()
+                ->back()
+                ->withErrors($form->getErrors())
+                ->withInput();
+        }
+
+        $data = array_except($form->getFieldValues(),['password','role']);
+        $user->fill($data);
+        $user->save();
+        $request->session()->flash('message', 'Usuário atualizado com sucesso.');
+
+        return redirect()->route('admin.users.index');
     }
 
     /**
