@@ -19,6 +19,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
+Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
+
+Route::get('users/settings', 'Auth\UserSettingsController@edit')->name('user.edit');
+Route::put('users/settings', 'Auth\UserSettingsController@update')->name('user.update');
+
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
@@ -26,7 +32,7 @@ Route::group([
 ], function (){
     Route::get('login', 'Auth\LoginController@ShowLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
-    Route::group(['middleware' => 'can:admin'], function(){
+    Route::group(['middleware' => ['isVerified','can:admin']], function(){
         Route::post('logout', 'Auth\LoginController@logout')->name('logout');
         Route::get('dashboard', 'DashboardController@index')->name('dashboard');
         Route::resource('users', 'UsersController');

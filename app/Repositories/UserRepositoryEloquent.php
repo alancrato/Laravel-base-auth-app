@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Jrean\UserVerification\Facades\UserVerification;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 
@@ -17,7 +18,19 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
     {
         $attributes['role'] = User::ROLE_CLIENT;
         $attributes['password'] = User::generatePassword();
-        return parent::create($attributes);
+        $model = parent::create($attributes);
+        UserVerification::generate($model);
+        UserVerification::send($model,'Sua conta foi criada!');
+        return $model;
+    }
+
+    public function update(array $attributes, $id)
+    {
+        if(isset($attributes['password'])){
+            $attributes['password'] = User::generatePassword($attributes['password']);
+        }
+        $model = parent::update($attributes,$id);
+        return $model;
     }
 
     /**

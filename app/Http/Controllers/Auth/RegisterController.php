@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Jrean\UserVerification\Traits\VerifiesUsers;
 
 class RegisterController extends Controller
 {
@@ -21,6 +23,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use VerifiesUsers;
 
     /**
      * Where to redirect users after registration.
@@ -28,15 +31,33 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+    /**
+     * @var UserRepository
+     */
+    private $repository;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $repository)
     {
         $this->middleware('guest');
+        $this->repository = $repository;
+    }
+
+    public function redirectAfterVerification()
+    {
+        $this->loginUser();
+        return route('user.edit');
+    }
+
+    protected function loginUser()
+    {
+        $email = \Request::get('email');
+        $user = $this->repository->findByField('email', $email)->first();
+        \Auth::login($user);
     }
 
     /**

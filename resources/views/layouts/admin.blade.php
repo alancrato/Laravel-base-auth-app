@@ -17,19 +17,20 @@
 </head>
 <body>
     <div id="app">
-
+        <!--
+            ['link' => route('admin.categories.index'), 'title' => 'Categories'],
+            ['link' => route('admin.series.index'), 'title' => 'Series'],
+            ['link' => route('admin.videos.index'), 'title' => 'Videos']
+         -->
         @php
             $navbar = Navbar::withBrand(config('app.name'),url('/admin/dashboard'))->inverse();
             if(Auth::check()){
                 $arrayList = [
                     ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
-                    ['link' => route('admin.users.index'), 'title' => 'Users'],
-                    ['link' => route('admin.categories.index'), 'title' => 'Categories'],
-                    ['link' => route('admin.series.index'), 'title' => 'Series'],
-                    ['link' => route('admin.videos.index'), 'title' => 'Videos']
+                    ['link' => route('admin.users.index'), 'title' => 'Users']
                 ];
                 $menus = Navigation::links($arrayList);
-                $logout = Navigation::links([[
+                $menuRight = Navigation::links([[
                     Auth::user()->name,
                     [
                         [
@@ -39,9 +40,13 @@
                                 'onclick' => "event.preventDefault();document.getElementById(\"form-logout\").submit();"
                             ]
                         ],
+                        [
+                            'link' => route('user.edit'),
+                            'title' => 'Settings'
+                        ]
                     ]
                 ]])->right();
-                $navbar->withContent($menus)->withContent($logout);
+                $navbar->withContent($menus)->withContent($menuRight);
             }
         @endphp
         {!! $navbar !!}

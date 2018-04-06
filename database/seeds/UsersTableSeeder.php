@@ -13,6 +13,9 @@ class UsersTableSeeder extends Seeder
     {
         factory(\App\Models\User::class,2)
             ->states('admin')
-            ->create();
+            ->create()->each(function ($user){
+                $user->verified = false;
+                $user->save();
+            });
     }
 }
