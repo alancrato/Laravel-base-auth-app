@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Dingo\Api\Exception\Handler;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
             },
             true
         );
+
+        $handler = app(Handler::class);
+        $handler->register(function (AuthenticationException $exception){
+           return response()->json(['error' => 'Unauthenticated'], 401);
+        });
     }
 
 }

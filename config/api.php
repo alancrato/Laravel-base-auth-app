@@ -169,7 +169,7 @@ return [
     */
 
     'auth' => [
-
+        'jwt' => \App\Auth\JWTProvider::class
     ],
 
     /*
