@@ -31,15 +31,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
           'limit' => 10,
           'expires' => 1
        ])->name('.access_token');
-   });
 
-   ApiRoute::group([
-       'middleware' => ['api.throttle','api.auth'],
-       'limit' => 100,
-       'expires' => 3
-   ], function (){
-       ApiRoute::get('/test', function (){
-          return "Opa, this is authenticated!";
+       ApiRoute::group([
+           'middleware' => ['api.throttle','api.auth'],
+           'limit' => 100,
+           'expires' => 3
+       ], function (){
+           ApiRoute::post('/logout', 'AuthController@logout');
+           ApiRoute::get('/test', function (){
+               return "Opa, this is authenticated!";
+           });
        });
    });
 });
