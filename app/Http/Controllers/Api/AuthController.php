@@ -19,10 +19,18 @@ class AuthController extends Controller
         if($token = \Auth::guard('api')->attempt($credentials)){
             return $this->sendLoginResponse($request, $token);
         }
+        return $this->sendFailedLoginResponse($request);
     }
 
     protected function sendLoginResponse(Request $request, $token)
     {
         return ['token' => $token];
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        return response()->json([
+           'error' => \Lang::get('auth.failed')
+        ], 400);
     }
 }
