@@ -173,6 +173,7 @@ return [
         Jrean\UserVerification\UserVerificationServiceProvider::class,
         \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Dingo\Api\Provider\LaravelServiceProvider::class,
+        \Barryvdh\Cors\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
