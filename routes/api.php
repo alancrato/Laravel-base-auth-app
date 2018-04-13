@@ -47,6 +47,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
            ApiRoute::get('/test', function (){
                return "Opa, this is authenticated!";
            });
+           ApiRoute::get('/user', function (Request $request){
+              return $request->user('api');
+           });
        });
    });
 });
