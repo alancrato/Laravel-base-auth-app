@@ -174,6 +174,7 @@ return [
         \Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
         \Dingo\Api\Provider\LaravelServiceProvider::class,
         \Barryvdh\Cors\ServiceProvider::class,
+        \Laravel\Socialite\SocialiteServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -241,7 +242,8 @@ return [
         'Navigation' => Bootstrapper\Facades\Navigation::class,
         'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
-        'ApiRoute' => Dingo\Api\Facade\Route::class
+        'ApiRoute' => Dingo\Api\Facade\Route::class,
+        'Socialite' => \Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];

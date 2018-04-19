@@ -37,6 +37,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
            'limit' => 10,
            'expires' => 1
        ])->name('.refresh_token');
+       ApiRoute::post('register', 'RegisterUsersController@store');
 
        ApiRoute::group([
            'middleware' => ['api.throttle','api.auth'],

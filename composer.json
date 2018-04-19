@@ -12,6 +12,7 @@
         "jrean/laravel-user-verification": "4.1.2",
         "kris/laravel-form-builder": "1.11.0",
         "laravel/framework": "5.4.*",
+        "laravel/socialite": "3.0",
         "laravel/tinker": "~1.0",
         "patricktalmadge/bootstrapper": "5.10",
         "prettus/l5-repository": "2.6.18",
