@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Dingo\Api\Exception\Handler;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Illuminate\Validation\ValidationException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -54,6 +55,12 @@ class AppServiceProvider extends ServiceProvider
         });
         $handler->register(function (JWTException $exception){
            return response()->json(['error' => $exception->getMessage()], 401);
+        });
+        $handler->register(function (ValidationException $exception){
+            return response()->json([
+                'error' => $exception->getMessage(),
+                'validation_errors' => $exception->validator->getMessageBag()->toArray()
+                ], 422);
         });
     }
 
