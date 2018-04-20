@@ -19,8 +19,8 @@ class UserRepositoryEloquent extends BaseRepository implements UserRepository
         $attributes['role'] = User::ROLE_CLIENT;
         $attributes['password'] = User::generatePassword();
         $model = parent::create($attributes);
-        UserVerification::generate($model);
-        UserVerification::send($model,'Sua conta foi criada!');
+        //UserVerification::generate($model);
+        //UserVerification::send($model,'Sua conta foi criada!');
         return $model;
     }
 

@@ -30,7 +30,18 @@ class RegisterUsersController extends Controller
 
         /** @var User $userSocial */
         $userSocial = $facebook->userFromToken($accessToken);
-        dd($userSocial);
+        $user = $this->repository->findByField('email', $userSocial->email)->first();
+        if(!$user){
+            \App\Models\User::unguard();
+            $user = $this->repository->create([
+               'name' => $userSocial->name,
+               'email' => $userSocial->email,
+               'role' => \App\Models\User::ROLE_CLIENT,
+               'verified' => true,
+            ]);
+            \App\Models\User::reguard();
+        }
+        return ['token' => \Auth::guard('api')->tokenById($user->id)];
     }
 
 }
