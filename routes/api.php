@@ -23,7 +23,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     'v1', function (){
    ApiRoute::group([
        'namespace' => 'App\Http\Controllers\Api',
-       'as' => 'api'
+       'as' => 'api',
+       'middleware' => 'bindings'
    ], function (){
        ApiRoute::post('/access_token', [
           'uses' => 'AuthController@accessToken',
@@ -39,6 +40,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
        ])->name('.refresh_token');
        ApiRoute::post('register', 'RegisterUsersController@store');
 
+       // ROTAS AUTH --------------------
        ApiRoute::group([
            'middleware' => ['api.throttle','api.auth'],
            'limit' => 100,
@@ -49,6 +51,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
               return $request->user('api');
            });
            ApiRoute::patch('/user/settings','UsersController@updateSettings');
+           ApiRoute::patch('/user/cpf','UsersController@addCpf');
+           ApiRoute::get('/plans','PlansController@index');
+           ApiRoute::post('/plans/{plan}/payments','PaymentsController@makePayment');
+           ApiRoute::patch('/plans/{plan}/payments','PaymentsController@approvalPayment');
+
+           //**** ÁREA DO ASSINANTE ****
+           ApiRoute::group(['middleware' => 'check-subscriptions'],function(){
+               ApiRoute::get('/test', function (){
+                  return "Subscription valid";
+               });
+               //ApiRoute::resource('videos','VideosController',['only'=>['index','show']]);
+           });
        });
    });
 });

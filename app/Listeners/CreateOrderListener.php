@@ -15,7 +15,7 @@ class CreateOrderListener
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param OrderRepository $repository
      */
     public function __construct(OrderRepository $repository)
     {

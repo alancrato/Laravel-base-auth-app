@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Exceptions\SubscriptionInvalidException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -59,6 +60,12 @@ class AppServiceProvider extends ServiceProvider
                 'error' => $exception->getMessage(),
                 'validation_errors' => $exception->validator->getMessageBag()->toArray()
                 ], 422);
+        });
+        $handler->register(function (SubscriptionInvalidException $exception) {
+            return response()->json([
+                'error' => 'subscription_valid_not_found',
+                'message' => $exception->getMessage()
+            ], 403);
         });
     }
 

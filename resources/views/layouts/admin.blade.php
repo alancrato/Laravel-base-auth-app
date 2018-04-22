@@ -17,11 +17,6 @@
 </head>
 <body>
     <div id="app">
-        <!--
-            ['link' => route('admin.categories.index'), 'title' => 'Categories'],
-            ['link' => route('admin.series.index'), 'title' => 'Series'],
-            ['link' => route('admin.videos.index'), 'title' => 'Videos']
-         -->
         @php
             $navbar = Navbar::withBrand(config('app.name'),url('/admin/dashboard'))->inverse();
             if(Auth::check()){
@@ -31,8 +26,13 @@
                     ['link' => route('admin.categories.index'), 'title' => 'Categories'],
                     ['link' => route('admin.series.index'), 'title' => 'Series'],
                     ['link' => route('admin.videos.index'), 'title' => 'Videos'],
-                    ['link' => route('admin.web_profiles.index'), 'title' => 'Perfil PayPal'],
-                    ['link' => route('admin.plans.index'), 'title' => 'Planos'],
+                    [
+                        'Vendas',
+                        [
+                            ['link' => route('admin.plans.index'), 'title' => 'Planos'],
+                            ['link' => route('admin.web_profiles.index'), 'title' => 'PayPal'],
+                        ]
+                    ],
                 ];
                 $menus = Navigation::links($arrayList);
                 $menuRight = Navigation::links([[
