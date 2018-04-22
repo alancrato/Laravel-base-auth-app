@@ -3,27 +3,26 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Video;
-use App\Forms\VideoForm;
 use App\Repositories\VideoRepository;
+use App\Forms\VideoForm;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Kris\LaravelFormBuilder\Form;
 
-class VideoController extends Controller
+class VideosController extends Controller
 {
     /**
-     * @var SerieRepository
+     * @var VideoRepository
      */
     private $repository;
 
     /**
-     * SerieController constructor.
-     * @param SerieRepository $repository
+     * VideosController constructor.
      */
     public function __construct(VideoRepository $repository)
     {
         $this->repository = $repository;
     }
-
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +33,6 @@ class VideoController extends Controller
         $videos = $this->repository->paginate();
         return view('admin.videos.index', compact('videos'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -42,10 +40,12 @@ class VideoController extends Controller
      */
     public function create()
     {
+        /** @var Form $form */
         $form = \FormBuilder::create(VideoForm::class, [
             'url' => route('admin.videos.store'),
-            'method' => 'POST'
+            'method'  => 'POST'
         ]);
+
         return view('admin.videos.create', compact('form'));
     }
 
@@ -68,20 +68,16 @@ class VideoController extends Controller
         }
 
         $data = $form->getFieldValues();
-
         $this->repository->create($data);
-
         $request->session()->flash('message', 'Video cadastrado com sucesso.');
-
         return redirect()->route('admin.videos.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Video $videos
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
-     * @internal param int $id
      */
     public function show(Video $video)
     {
@@ -91,16 +87,18 @@ class VideoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
     public function edit(Video $video)
     {
+        /** @var Form $form */
         $form = \FormBuilder::create(VideoForm::class, [
-            'url' => route('admin.videos.update',['video' => $video->id]),
-            'method' => 'PUT',
+            'url' => route('admin.videos.update', ['video' => $video->id]),
+            'method'  => 'PUT',
             'model' => $video
         ]);
+
         return view('admin.videos.edit', compact('form'));
     }
 
@@ -108,15 +106,13 @@ class VideoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(VideoForm::class, [
-            'data' => ['id' => $id]
-        ]);
+        $form = \FormBuilder::create(VideoForm::class);
 
         if(!$form->isValid()){
             return redirect()
@@ -125,27 +121,27 @@ class VideoController extends Controller
                 ->withInput();
         }
 
-        $data = $request->all();
-
+        $data = $form->getFieldValues();
         $this->repository->update($data,$id);
-
-        $request->session()->flash('message', 'Video atualizado com sucesso.');
-
-        return redirect()->route('admin.videos.index');
+        $request->session()->flash('message', 'Video alterado com sucesso.');
+        return redirect()->back();
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Video  $video
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
         $this->repository->delete($id);
-
         $request->session()->flash('message', 'Video excluido com sucesso.');
-
         return redirect()->route('admin.videos.index');
+    }
+
+    public function fileAsset(Video $video)
+    {
+        return response()->download($video->file_path);
     }
 }

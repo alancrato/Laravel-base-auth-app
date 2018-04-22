@@ -32,12 +32,29 @@ Route::group([
 ], function (){
     Route::get('login', 'Auth\LoginController@ShowLoginForm')->name('login');
     Route::post('login', 'Auth\LoginController@login');
-    Route::group(['middleware' => ['isVerified','can:admin']], function(){
-        Route::post('logout', 'Auth\LoginController@logout')->name('logout');
-        Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+
+    Route::group(['middleware' => ['isVerified', 'can:admin']], function (){
+        Route::name('logout')->post('logout', 'Auth\LoginController@logout');
+        Route::get('dashboard', function (){
+            return view('admin.dashboard');
+        });
+        Route::name('user_settings.edit')->get('users/settings', 'Auth\UserSettingsController@edit');
+        Route::name('user_settings.update')->put('users/settings', 'Auth\UserSettingsController@update');
         Route::resource('users', 'UsersController');
         Route::resource('categories', 'CategoryController');
+        Route::name('series.thumb_asset')
+            ->get('series/{series}/thumb_asset', 'SerieController@thumbAsset');
+        Route::name('series.thumb_small_asset')
+            ->get('series/{series}/thumb_small_asset', 'SerieController@thumbSmallAsset');
         Route::resource('series', 'SerieController');
-        Route::resource('videos', 'VideoController');
+        Route::group(['prefix' => 'videos', 'as' => 'videos.'], function (){
+            Route::name('relations.create')->get('{video}/relations', 'VideoRelationsController@create');
+            Route::name('relations.store')->post('{video}/relations', 'VideoRelationsController@store');
+            Route::name('uploads.create')->get('{video}/uploads', 'VideoUploadsController@create');
+            Route::name('uploads.store')->post('{video}/uploads', 'VideoUploadsController@store');
+        });
+        Route::resource('videos', 'VideosController');
+        Route::resource('plans', 'PlansController');
+        Route::resource('web_profiles', 'PayPalWebProfilesController');
     });
 });

@@ -15,25 +15,17 @@ class CategoryController extends Controller
      */
     private $repository;
 
-    /**
-     * CategoryController constructor.
-     */
     public function __construct(CategoryRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
+    public function index(){
+
         $categories = $this->repository->paginate();
         return view('admin.categories.index', compact('categories'));
-    }
 
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -43,8 +35,9 @@ class CategoryController extends Controller
     {
         $form = \FormBuilder::create(CategoryForm::class, [
             'url' => route('admin.categories.store'),
-            'method' => 'POST'
+            'method'  => 'POST'
         ]);
+
         return view('admin.categories.create', compact('form'));
     }
 
@@ -67,18 +60,16 @@ class CategoryController extends Controller
         }
 
         $data = $form->getFieldValues();
-
         $this->repository->create($data);
-
-        $request->session()->flash('message', 'Categoria cadastrada com sucesso.');
-
+        $request->session()->flash('message', 'Categoria criada com sucesso.');
         return redirect()->route('admin.categories.index');
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function show(Category $category)
@@ -89,16 +80,17 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function edit(Category $category)
     {
         $form = \FormBuilder::create(CategoryForm::class, [
-            'url' => route('admin.categories.update',['categories' => $category->id]),
-            'method' => 'PUT',
+            'url' => route('admin.categories.update', ['category' => $category->id]),
+            'method'  => 'PUT',
             'model' => $category
         ]);
+
         return view('admin.categories.edit', compact('form'));
     }
 
@@ -106,15 +98,13 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(CategoryForm::class, [
-            'data' => ['id' => $id]
-        ]);
+        $form = \FormBuilder::create(CategoryForm::class);
 
         if(!$form->isValid()){
             return redirect()
@@ -123,27 +113,23 @@ class CategoryController extends Controller
                 ->withInput();
         }
 
-        $data = $request->all();
-
+        $data = $form->getFieldValues();
         $this->repository->update($data,$id);
-
-        $request->session()->flash('message', 'Categoria atualizada com sucesso.');
-
+        $request->session()->flash('message', 'Categoria alterada com sucesso.');
         return redirect()->route('admin.categories.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
         $this->repository->delete($id);
-
         $request->session()->flash('message', 'Categoria excluida com sucesso.');
-
         return redirect()->route('admin.categories.index');
     }
 }
+

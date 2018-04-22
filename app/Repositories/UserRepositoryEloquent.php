@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\User;
-use Jrean\UserVerification\Facades\UserVerification;
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 

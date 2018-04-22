@@ -26,8 +26,13 @@
             $navbar = Navbar::withBrand(config('app.name'),url('/admin/dashboard'))->inverse();
             if(Auth::check()){
                 $arrayList = [
-                    ['link' => route('admin.dashboard'), 'title' => 'Dashboard'],
-                    ['link' => route('admin.users.index'), 'title' => 'Users']
+                    ['link' => url('/admin/dashboard'), 'title' => 'Dashboard'],
+                    ['link' => route('admin.users.index'), 'title' => 'Users'],
+                    ['link' => route('admin.categories.index'), 'title' => 'Categories'],
+                    ['link' => route('admin.series.index'), 'title' => 'Series'],
+                    ['link' => route('admin.videos.index'), 'title' => 'Videos'],
+                    ['link' => route('admin.web_profiles.index'), 'title' => 'Perfil PayPal'],
+                    ['link' => route('admin.plans.index'), 'title' => 'Planos'],
                 ];
                 $menus = Navigation::links($arrayList);
                 $menuRight = Navigation::links([[

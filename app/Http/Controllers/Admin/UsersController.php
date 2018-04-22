@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Forms\UsersForm;
+use App\Forms\UserForm;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
@@ -16,7 +16,9 @@ class UsersController extends Controller
      */
     private $repository;
 
-
+    /**
+     * UsersController constructor.
+     */
     public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
@@ -31,6 +33,7 @@ class UsersController extends Controller
     {
         $users = $this->repository->paginate();
         return view('admin.users.index', compact('users'));
+
     }
 
     /**
@@ -40,10 +43,11 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $form = \FormBuilder::create(UsersForm::class, [
-            'url' => route('admin.users.store'),
-            'method' => 'POST'
+        $form = \FormBuilder::create(UserForm::class, [
+           'url' => route('admin.users.store'),
+            'method'  => 'POST'
         ]);
+
         return view('admin.users.create', compact('form'));
     }
 
@@ -56,22 +60,21 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(UsersForm::class);
+        $form = \FormBuilder::create(UserForm::class);
 
-        if(!$form->isValid()){
-            return redirect()
-                ->back()
-                ->withErrors($form->getErrors())
-                ->withInput();
-        }
+       if(!$form->isValid()){
+           return redirect()
+               ->back()
+               ->withErrors($form->getErrors())
+               ->withInput();
+       }
 
-        $data = $form->getFieldValues();
+       $data = $form->getFieldValues();
+       $data['role'] = User::ROLE_ADMIN;
+       $this->repository->create($data);
+       $request->session()->flash('message', 'Usuário criado com sucesso.');
+       return redirect()->route('admin.users.index');
 
-        $this->repository->create($data);
-
-        $request->session()->flash('message', 'Usuário cadastrado com sucesso.');
-
-        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -93,11 +96,12 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        $form = \FormBuilder::create(UsersForm::class, [
-            'url' => route('admin.users.update',['user' => $user->id]),
-            'method' => 'PUT',
+        $form = \FormBuilder::create(UserForm::class, [
+            'url' => route('admin.users.update', ['user' => $user->id]),
+            'method'  => 'PUT',
             'model' => $user
         ]);
+
         return view('admin.users.edit', compact('form'));
     }
 
@@ -111,7 +115,7 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         /** @var Form $form */
-        $form = \FormBuilder::create(UsersForm::class, [
+        $form = \FormBuilder::create(UserForm::class, [
             'data' => ['id' => $id]
         ]);
 
@@ -122,12 +126,9 @@ class UsersController extends Controller
                 ->withInput();
         }
 
-        $data = array_except($form->getFieldValues(),['password','role']);
-
+        $data = array_except($form->getFieldValues(),['password', 'role']);
         $this->repository->update($data,$id);
-
-        $request->session()->flash('message', 'Usuário atualizado com sucesso.');
-
+        $request->session()->flash('message', 'Usuário editado com sucesso.');
         return redirect()->route('admin.users.index');
     }
 
@@ -140,9 +141,7 @@ class UsersController extends Controller
     public function destroy(Request $request, $id)
     {
         $this->repository->delete($id);
-
         $request->session()->flash('message', 'Usuário excluido com sucesso.');
-
         return redirect()->route('admin.users.index');
     }
 }

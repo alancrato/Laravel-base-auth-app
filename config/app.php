@@ -175,6 +175,7 @@ return [
         \Dingo\Api\Provider\LaravelServiceProvider::class,
         \Barryvdh\Cors\ServiceProvider::class,
         \Laravel\Socialite\SocialiteServiceProvider::class,
+        \Folklore\Image\ImageServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -184,6 +185,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        //App\Providers\ApiServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
     ],
@@ -241,7 +243,9 @@ return [
         'Navbar' => Bootstrapper\Facades\Navbar::class,
         'Navigation' => Bootstrapper\Facades\Navigation::class,
         'FormBuilder' => Kris\LaravelFormBuilder\Facades\FormBuilder::class,
+        'BootstrapImage' => \Bootstrapper\Facades\Image::class,
         'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
+        'Image' => \Folklore\Image\Facades\Image::class,
         'ApiRoute' => Dingo\Api\Facade\Route::class,
         'Socialite' => \Laravel\Socialite\Facades\Socialite::class,
     ],

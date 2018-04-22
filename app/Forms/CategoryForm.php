@@ -10,12 +10,6 @@ class CategoryForm extends Form
     {
         $this
             ->add('name', 'text',[
-                'rules' => 'required|min:3'
-            ])
-            ->add('description', 'text',[
-                'rules' => 'min:3'
-            ])
-            ->add('url', 'text',[
                 'rules' => 'required'
             ]);
     }

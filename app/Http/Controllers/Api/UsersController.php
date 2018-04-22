@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\AddCpfRequest;
 use App\Http\Requests\UserSettingRequest;
 use App\Repositories\UserRepository;
 use App\Http\Controllers\Controller;
@@ -27,5 +28,13 @@ class UsersController extends Controller
         $this->repository->update($data, $request->user('api')->id);
 
         return $request->user('api');
+    }
+
+    public function addCpf(AddCpfRequest $request)
+    {
+        $user = $this->repository->update([
+            'cpf' => $request->input('cpf')
+        ], $request->user('api')->id);
+        return $user;
     }
 }

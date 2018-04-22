@@ -3,12 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Auth\AuthenticationException;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Dingo\Api\Exception\Handler;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Illuminate\Validation\ValidationException;
 
 class AppServiceProvider extends ServiceProvider

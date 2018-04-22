@@ -45,13 +45,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
            'expires' => 3
        ], function (){
            ApiRoute::post('/logout', 'AuthController@logout');
-           ApiRoute::get('/test', function (){
-               return "Opa, this is authenticated!";
-           });
            ApiRoute::get('/user', function (Request $request){
               return $request->user('api');
            });
-           ApiRoute::patch('/user/settings', 'UsersController@updateSettings');
+           ApiRoute::patch('/user/settings','UsersController@updateSettings');
        });
    });
 });

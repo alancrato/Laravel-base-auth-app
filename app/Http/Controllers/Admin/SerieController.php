@@ -2,23 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Serie;
 use App\Forms\SerieForm;
-use App\Repositories\SerieRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Serie;
+use App\Repositories\SerieRepository;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class SerieController extends Controller
 {
+
     /**
      * @var SerieRepository
      */
     private $repository;
 
-    /**
-     * SerieController constructor.
-     * @param SerieRepository $repository
-     */
     public function __construct(SerieRepository $repository)
     {
         $this->repository = $repository;
@@ -44,8 +42,9 @@ class SerieController extends Controller
     {
         $form = \FormBuilder::create(SerieForm::class, [
             'url' => route('admin.series.store'),
-            'method' => 'POST'
+            'method'  => 'POST'
         ]);
+
         return view('admin.series.create', compact('form'));
     }
 
@@ -68,20 +67,19 @@ class SerieController extends Controller
         }
 
         $data = $form->getFieldValues();
-
+        $data['thumb'] = env('SERIE_NO_THUMB');
+        Model::unguard();
         $this->repository->create($data);
-
-        $request->session()->flash('message', 'Serie cadastrada com sucesso.');
-
+        $request->session()->flash('message', 'Série criada com sucesso.');
         return redirect()->route('admin.series.index');
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Serie $serie
+     * @param  \App\Models\Serie  $serie
      * @return \Illuminate\Http\Response
-     * @internal param int $id
      */
     public function show(Serie $series)
     {
@@ -91,16 +89,18 @@ class SerieController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Serie  $serie
      * @return \Illuminate\Http\Response
      */
     public function edit(Serie $series)
     {
         $form = \FormBuilder::create(SerieForm::class, [
-            'url' => route('admin.series.update',['series' => $series->id]),
-            'method' => 'PUT',
-            'model' => $series
+            'url' => route('admin.series.update', ['serie' => $series->id]),
+            'method'  => 'PUT',
+            'model' => $series,
+            'data' => ['id' => $series->id]
         ]);
+
         return view('admin.series.edit', compact('form'));
     }
 
@@ -108,7 +108,7 @@ class SerieController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Serie  $serie
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -125,27 +125,32 @@ class SerieController extends Controller
                 ->withInput();
         }
 
-        $data = $request->all();
-
+        $data = array_except($form->getFieldValues(),'thumb');
         $this->repository->update($data,$id);
-
-        $request->session()->flash('message', 'Serie atualizada com sucesso.');
-
+        $request->session()->flash('message', 'Série alterada com sucesso.');
         return redirect()->route('admin.series.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Serie  $serie
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
         $this->repository->delete($id);
-
-        $request->session()->flash('message', 'Serie excluida com sucesso.');
-
+        $request->session()->flash('message', 'Série excluida com sucesso.');
         return redirect()->route('admin.series.index');
+    }
+
+    public function thumbAsset(Serie $series)
+    {
+        return response()->download($series->thumb_path);
+    }
+
+    public function thumbSmallAsset(Serie $series)
+    {
+        return response()->download($series->thumb_small_path);
     }
 }

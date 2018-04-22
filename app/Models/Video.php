@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Bootstrapper\Interfaces\TableInterface;
+use App\Media\VideoPaths;
 use Illuminate\Database\Eloquent\Model;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
@@ -10,41 +11,50 @@ use Prettus\Repository\Traits\TransformableTrait;
 class Video extends Model implements Transformable, TableInterface
 {
     use TransformableTrait;
+    use VideoPaths;
 
     protected $fillable = [
-        'name',
+        'title',
         'description',
-        'content',
-        'serie_id',
-        'url'
+        'duration',
+        'published',
+        'serie_id'
     ];
-
-    public function getTableHeaders()
-    {
-        return ['#', 'Nome', 'Description', 'Serie', 'Content', 'Url'];
-    }
-
-    public function getValueForHeader($header)
-    {
-        switch ($header){
-            case '#':
-                return $this->id;
-            case 'Nome':
-                return $this->name;
-            case 'Description':
-                return $this->description;
-            case 'Serie':
-                return $this->serie->name;
-            case 'Content':
-                return $this->content;
-            case 'Url':
-                return $this->url;
-        }
-    }
 
     public function serie()
     {
         return $this->belongsTo(Serie::class);
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+
+    /**
+     * A list of headers to be used when a table is displayed
+     *
+     * @return array
+     */
+    public function getTableHeaders()
+    {
+        return['#'];
+    }
+
+    /**
+     * Get the value for a given header. Note that this will be the value
+     * passed to any callback functions that are being used.
+     *
+     * @param string $header
+     * @return mixed
+     */
+    public function getValueForHeader($header)
+    {
+        switch ($header){
+            case '#';
+                return $this->id;
+                break;
+        }
+    }
 }

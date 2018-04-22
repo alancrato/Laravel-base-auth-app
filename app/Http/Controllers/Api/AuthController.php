@@ -24,7 +24,9 @@ class AuthController extends Controller
 
     protected function sendLoginResponse(Request $request, $token)
     {
-        return ['token' => $token];
+        return response()->json([
+            'token' => $token
+        ]);
     }
 
     protected function sendFailedLoginResponse(Request $request)
