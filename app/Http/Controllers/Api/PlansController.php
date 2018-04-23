@@ -14,6 +14,7 @@ class PlansController extends Controller
 
     /**
      * PlansController constructor.
+     * @param PlanRepository $repository
      */
     public function __construct(PlanRepository $repository)
     {

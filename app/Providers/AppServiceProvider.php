@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Exceptions\SubscriptionInvalidException;
+use Code\Validator\Cpf;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -20,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        \Validator::extend('cpf', function ($attributem,$value,$parameters,$validator){
+            return (new Cpf())->isValid($value);
+        });
     }
 
     /**

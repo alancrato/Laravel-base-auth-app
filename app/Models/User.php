@@ -24,7 +24,8 @@ class User extends Authenticatable implements TableInterface, JWTSubject
         'name',
         'email',
         'password',
-        'role'
+        'role',
+        'cpf'
     ];
 
     /**
