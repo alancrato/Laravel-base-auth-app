@@ -8,6 +8,8 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Dingo\Api\Exception\Handler;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Rest\ApiContext;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Validation\ValidationException;
 
@@ -52,6 +54,17 @@ class AppServiceProvider extends ServiceProvider
             },
             true
         );
+
+        $this->app->bind(ApiContext::class, function (){
+            $apiContext = new ApiContext(new OAuthTokenCredential(
+               env('PAYPAL_CLIENT_ID'),
+               env('PAYPAL_CLIENT_SECRET')
+            ));
+            $apiContext->setConfig([
+                'http.CURLOPT_CONNECTIONTIMEOUT' => 45
+            ]);
+            return $apiContext;
+        });
 
         $handler = app(Handler::class);
         $handler->register(function (AuthenticationException $exception){
